@@ -7,13 +7,14 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4  # อัปเดตเป็นเวอร์ชันล่าสุด
+      - uses: actions/setup-node@v4  # อัปเดตเป็นเวอร์ชันล่าสุด
         with:
-          node-version: '14'
-      - run: npm install
-      - run: npm run build:static
-      - uses: peaceiris/actions-gh-pages@v3
+          node-version: '18'  # ใช้ Node.js 18 (รองรับ Next.js 15.2.0)
+          cache: 'npm'  # ใช้ cache เพื่อเพิ่มประสิทธิภาพ
+      - run: npm ci  # ใช้ npm ci เพื่อติดตั้ง dependencies อย่างสะอาด
+      - run: npm run build:static  # รัน build:static (ต้องกำหนดใน package.json)
+      - uses: peaceiris/actions-gh-pages@v4  # อัปเดตเป็นเวอร์ชันล่าสุด
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
+          publish_dir: ./out  # โฟลเดอร์ผลลัพธ์จาก next build กับ output: 'export'
